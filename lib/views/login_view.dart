@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/user_view_model.dart';
+import 'home_view.dart';
 import 'register_view.dart';
 
 class LoginView extends StatelessWidget {
@@ -35,7 +36,7 @@ class LoginView extends StatelessWidget {
                 if (user != null) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (_) => LoginView()),
+                    MaterialPageRoute(builder: (_) => HomeView()),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

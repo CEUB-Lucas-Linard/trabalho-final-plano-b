@@ -5,6 +5,7 @@ import '../viewmodels/user_view_model.dart';
 class RegisterView extends StatelessWidget {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,10 @@ class RegisterView extends StatelessWidget {
               decoration: InputDecoration(labelText: 'Senha'),
               obscureText: true,
             ),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Digite seu nome'),
+            ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
@@ -30,6 +35,7 @@ class RegisterView extends StatelessWidget {
                 final success = await userViewModel.register(
                   _usernameController.text,
                   _passwordController.text,
+                  _nameController.text,
                 );
                 if (success) {
                   Navigator.pop(context);

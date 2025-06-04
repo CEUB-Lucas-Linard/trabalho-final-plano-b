@@ -4,10 +4,11 @@ import '../models/database_helper.dart';
 
 class UserViewModel extends ChangeNotifier {
   final DatabaseHelper _dbHelper = DatabaseHelper();
+  User? currentUser;
 
-  Future<bool> register(String username, String password) async {
+  Future<bool> register(String username, String password, String name) async {
     try {
-      await _dbHelper.insertUser(User(username: username, password: password));
+      await _dbHelper.insertUser(User(username: username, password: password, name: name));
       return true;
     } catch (e) {
       return false;
@@ -15,6 +16,17 @@ class UserViewModel extends ChangeNotifier {
   }
 
   Future<User?> login(String username, String password) async {
-    return await _dbHelper.getUser(username, password);
+    final user = await _dbHelper.getUser(username, password);
+    if (user != null && user.password == password) {
+      currentUser = user;
+      notifyListeners();
+      return user;
+    }
+    return null;
+  }
+
+  void logout() {
+    currentUser = null;
+    notifyListeners();
   }
 }

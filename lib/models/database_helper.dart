@@ -26,7 +26,8 @@ class DatabaseHelper {
           CREATE TABLE users(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE,
-            password TEXT
+            password TEXT,
+            name TEXT NOT NULL
           )
     ''');
   }
