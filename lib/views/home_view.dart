@@ -1,11 +1,14 @@
+import 'package:app_estudos/views/deck_manager_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../viewmodels/deck_view_model.dart';
 import '../viewmodels/user_view_model.dart';
 import 'login_view.dart';
 
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final deckViewModel = Provider.of<DeckViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: Consumer<UserViewModel>(
@@ -45,11 +48,33 @@ class HomeView extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.settings),
                   tooltip: 'Gerenciar Decks',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => DeckManagerView()),
+                    );
+                  },
                 ),
               ],
             ),
             SizedBox(height: 12),
+            Expanded(
+              child: FutureBuilder(
+                future: deckViewModel.loadDecks(),
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                    itemCount: deckViewModel.decks.length,
+                    itemBuilder: (context, index) {
+                      final deck = deckViewModel.decks[index];
+                      return ListTile(
+                        title: Text(deck.title),
+                        trailing: Icon(Icons.arrow_forward)
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
