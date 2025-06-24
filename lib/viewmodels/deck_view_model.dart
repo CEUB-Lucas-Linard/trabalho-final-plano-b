@@ -1,4 +1,4 @@
-
+import 'package:app_estudos/models/flashcard.dart';
 import 'package:flutter/material.dart';
 import '../models/deck.dart';
 import '../models/database_helper.dart';
@@ -29,6 +29,27 @@ class DeckViewModel extends ChangeNotifier {
   Future<void> deleteDeck(int id) async {
     await _dbHelper.deleteDeckById(id);
     await loadDecks();
+  }
+
+  Future<List<Flashcard>> loadDeck(int deckId) async {
+    return await _dbHelper.getFlashcards(deckId);
+  }
+
+  Future<void> addFlashcard(int deckId, String question, String answer) async {
+    final flashcard = Flashcard(deckId: deckId, question: question, answer: answer);
+    await _dbHelper.insertFlashcard(flashcard);
+    notifyListeners();
+  }
+
+  Future<void> updateFlashcard(int id, int deckId, String question, String answer) async {
+    final flashcard = Flashcard(id: id, deckId: deckId, question: question, answer: answer);
+    await _dbHelper.updateFlashcard(flashcard);
+    notifyListeners();
+  }
+
+  Future<void> deleteFlashcard(int id) async {
+    await _dbHelper.deleteFlashcardById(id);
+    notifyListeners();
   }
 
 }

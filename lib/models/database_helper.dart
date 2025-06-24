@@ -3,6 +3,7 @@ import 'package:app_estudos/models/user.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'deck.dart';
+import 'flashcard.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -94,6 +95,27 @@ class DatabaseHelper {
     final db = await database;
     final maps = await db.query('decks');
     return maps.map((map) => Deck.fromMap(map)).toList();
+  }
+
+  Future<void> insertFlashcard(Flashcard card) async {
+    final db = await database;
+    await db.insert('flashcards', card.toMap());
+  }
+
+  Future<List<Flashcard>> getFlashcards(int deckId) async {
+    final db = await database;
+    final maps = await db.query('flashcards', where: 'deckId = ?', whereArgs: [deckId]);
+    return maps.map((map) => Flashcard.fromMap(map)).toList();
+  }
+
+  Future<int> updateFlashcard(Flashcard flashcard) async {
+    final db = await database;
+    return await db.update('flashcards', flashcard.toMap(), where: 'id = ?', whereArgs: [flashcard.id]);
+  }
+
+  Future<int> deleteFlashcardById(int id) async {
+    final db = await database;
+    return await db.delete('flashcards', where: 'id = ?', whereArgs: [id]);
   }
 
 }

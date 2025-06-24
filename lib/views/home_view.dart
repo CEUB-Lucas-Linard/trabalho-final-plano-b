@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/deck_view_model.dart';
 import '../viewmodels/user_view_model.dart';
+import 'deck_view.dart';
 import 'login_view.dart';
 
 class HomeView extends StatelessWidget {
@@ -68,7 +69,15 @@ class HomeView extends StatelessWidget {
                       final deck = deckViewModel.decks[index];
                       return ListTile(
                         title: Text(deck.title),
-                        trailing: Icon(Icons.arrow_forward)
+                        trailing: Icon(Icons.arrow_forward),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DeckView(deck: deck),
+                            ),
+                          );
+                        },
                       );
                     },
                   );

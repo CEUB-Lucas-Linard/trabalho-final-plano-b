@@ -1,7 +1,6 @@
 import 'package:app_estudos/viewmodels/deck_view_model.dart';
 import 'package:app_estudos/viewmodels/user_view_model.dart';
 import 'package:app_estudos/views/login_view.dart';
-import 'package:app_estudos/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,11 +22,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flashcard Quiz',
         theme: ThemeData(primarySwatch: Colors.indigo),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => LoginView(),
-          '/homeview': (context) => HomeView(),
-        },
+        home: LoginView(),
       ),
     );
   }

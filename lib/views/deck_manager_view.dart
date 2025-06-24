@@ -70,11 +70,19 @@ class DeckManagerView extends StatelessWidget {
           decoration: InputDecoration(labelText: 'Título do Deck'),
         ),
         actions: [
-          TextButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.black,
+            ),
             child: Text('Cancelar'),
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.black,
+            ),
             child: Text('Criar'),
             onPressed: () async {
               await deckViewModel.createDeck(controller.text);
@@ -98,11 +106,19 @@ class DeckManagerView extends StatelessWidget {
           decoration: InputDecoration(labelText: 'Título do Deck'),
         ),
         actions: [
-          TextButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.black,
+            ),
             child: Text('Cancelar'),
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.black,
+            ),
             child: Text('Salvar'),
             onPressed: () async {
               await deckViewModel.updateDeck(deck.id!, controller.text);
