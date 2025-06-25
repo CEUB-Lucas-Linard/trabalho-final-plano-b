@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flashcard Quiz',
+        title: 'GeniusCard',
         theme: ThemeData(primarySwatch: Colors.indigo),
         home: LoginView(),
       ),

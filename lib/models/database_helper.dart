@@ -19,7 +19,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    final path = join(await getDatabasesPath(), 'flashcards.db');
+    final path = join(await getDatabasesPath(), 'geniuscard.db');
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
