@@ -16,6 +16,13 @@ class DeckView extends StatefulWidget {
 
 class _DeckViewState extends State<DeckView> {
   late Future<List<Flashcard>> _flashcardsFuture;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -37,22 +44,24 @@ class _DeckViewState extends State<DeckView> {
       appBar: AppBar(title: Text(widget.deck.title)),
       body: Stack(
         children: [
-          Scrollbar(
-            thumbVisibility: true,
-            child: FutureBuilder<List<Flashcard>>(
-              future: _flashcardsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Center(child: Text('Erro ao carregar flashcards.'));
-                }
-                final flashcards = snapshot.data ?? [];
-                if (flashcards.isEmpty) {
-                  return Center(child: Text('Nenhum flashcard neste deck.'));
-                }
-                return ListView.builder(
+          FutureBuilder<List<Flashcard>>(
+            future: _flashcardsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('Erro ao carregar flashcards.'));
+              }
+              final flashcards = snapshot.data ?? [];
+              if (flashcards.isEmpty) {
+                return Center(child: Text('Nenhum flashcard neste deck.'));
+              }
+              return Scrollbar(
+                thumbVisibility: true,
+                controller: _scrollController,
+                child: ListView.builder(
+                  controller: _scrollController,
                   padding: EdgeInsets.only(bottom: 80),
                   itemCount: flashcards.length,
                   itemBuilder: (context, index) {
@@ -60,22 +69,22 @@ class _DeckViewState extends State<DeckView> {
                     return ListTile(
                       title: Text(card.question),
                       trailing: Icon(Icons.arrow_forward),
-                        onTap: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => FlashcardView(flashcard: card, deck: widget.deck),
-                            ),
-                          );
-                          if (result == true) {
-                            _refreshFlashcards();
-                          }
-                        },
+                      onTap: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => FlashcardView(flashcard: card, deck: widget.deck),
+                          ),
+                        );
+                        if (result == true) {
+                          _refreshFlashcards();
+                        }
+                      },
                     );
                   },
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
           Align(
             alignment: Alignment.bottomCenter,
