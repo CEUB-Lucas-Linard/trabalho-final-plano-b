@@ -22,11 +22,7 @@ class RegisterView extends StatelessWidget {
               TextFormField(
                 controller: _usernameController,
                 decoration: InputDecoration(labelText: 'Usuário'),
-                validator:
-                    (value) =>
-                        value == null || value.isEmpty
-                            ? 'Usuário obrigatório'
-                            : null,
+                validator: (value) => value == null || value.isEmpty ? 'Usuário obrigatório' : null,
               ),
               TextFormField(
                 controller: _passwordController,
