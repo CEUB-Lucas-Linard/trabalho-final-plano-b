@@ -60,33 +60,89 @@ class HomeView extends StatelessWidget {
             ),
             SizedBox(height: 12),
             Expanded(
-              child: FutureBuilder(
-                future: deckViewModel.loadDecks(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                    itemCount: deckViewModel.decks.length,
-                    itemBuilder: (context, index) {
-                      final deck = deckViewModel.decks[index];
-                      return ListTile(
-                        title: Text(deck.title),
-                        trailing: Icon(Icons.arrow_forward),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => DeckView(deck: deck),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: FutureBuilder(
+                  future: deckViewModel.loadDecks(),
+                  builder: (context, snapshot) {
+                    if (deckViewModel.decks.isEmpty) {
+                      return Center(child: Text('Nenhum deck encontrado.'));
+                    }
+                    return ListView.builder(
+                      itemCount: deckViewModel.decks.length,
+                      itemBuilder: (context, index) {
+                        final deck = deckViewModel.decks[index];
+                        return ListTile(
+                          title: Text(deck.title),
+                          trailing: Icon(Icons.arrow_forward),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => DeckView(deck: deck),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton.icon(
+              icon: Icon(Icons.add),
+              label: Text('Novo Deck'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.black,
+                minimumSize: Size(double.infinity, 48),
+              ),
+              onPressed: () {
+                _showCreateDialog(context, deckViewModel);
+              },
             ),
           ],
         ),
       ),
     );
   }
+
+  void _showCreateDialog(BuildContext context, DeckViewModel deckViewModel) {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Novo Deck'),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(labelText: 'Título do Deck'),
+        ),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.black,
+            ),
+            child: Text('Cancelar'),
+            onPressed: () => Navigator.pop(context),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.black,
+            ),
+            child: Text('Criar'),
+            onPressed: () async {
+              await deckViewModel.createDeck(controller.text);
+              Navigator.pop(context);
+              deckViewModel.loadDecks();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
 }

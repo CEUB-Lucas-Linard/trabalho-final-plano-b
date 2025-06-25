@@ -14,15 +14,6 @@ class DeckManagerView extends StatelessWidget {
           'Gerenciar Decks',
           style: TextStyle(fontWeight: FontWeight.bold),
           ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            tooltip: 'Novo Deck',
-            onPressed: () {
-              _showCreateDialog(context, deckViewModel);
-            },
-          ),
-        ],
       ),
       body: FutureBuilder(
         future: deckViewModel.loadDecks(),
@@ -44,9 +35,8 @@ class DeckManagerView extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () async {
-                        await deckViewModel.deleteDeck(deck.id!);
-                        deckViewModel.loadDecks();
+                      onPressed: () {
+                        _confirmDeleteDeck(context, deckViewModel, deck.id!);
                       },
                     ),
                   ],
@@ -55,42 +45,6 @@ class DeckManagerView extends StatelessWidget {
             },
           );
         },
-      ),
-    );
-  }
-
-  void _showCreateDialog(BuildContext context, DeckViewModel deckViewModel) {
-    final controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Novo Deck'),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(labelText: 'Título do Deck'),
-        ),
-        actions: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.black,
-            ),
-            child: Text('Cancelar'),
-            onPressed: () => Navigator.pop(context),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.black,
-            ),
-            child: Text('Criar'),
-            onPressed: () async {
-              await deckViewModel.createDeck(controller.text);
-              Navigator.pop(context);
-              deckViewModel.loadDecks();
-            },
-          ),
-        ],
       ),
     );
   }
@@ -122,6 +76,38 @@ class DeckManagerView extends StatelessWidget {
             child: Text('Salvar'),
             onPressed: () async {
               await deckViewModel.updateDeck(deck.id!, controller.text);
+              Navigator.pop(context);
+              deckViewModel.loadDecks();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDeleteDeck(BuildContext context, DeckViewModel deckViewModel, int deckId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Excluir Deck'),
+        content: Text('Tem certeza que deseja excluir este deck? Esta ação não pode ser desfeita.'),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.black,
+            ),
+            child: Text('Cancelar'),
+            onPressed: () => Navigator.pop(context),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.black,
+            ),
+            child: Text('Excluir'),
+            onPressed: () async {
+              await deckViewModel.deleteDeck(deckId);
               Navigator.pop(context);
               deckViewModel.loadDecks();
             },
