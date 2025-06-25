@@ -53,7 +53,8 @@ class DatabaseHelper {
         deckId INTEGER,
         correctAnswers INTEGER,
         totalQuestions INTEGER,
-        timestamp TEXT
+        timestamp TEXT,
+        FOREIGN KEY (deckId) REFERENCES decks (id) ON DELETE CASCADE
       )
     ''');
   }
