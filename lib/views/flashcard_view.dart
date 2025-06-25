@@ -65,14 +65,43 @@ class _FlashcardViewState extends State<FlashcardView> {
   }
 
   void _delete() async {
-    final deckViewModel = Provider.of<DeckViewModel>(context, listen: false);
-    await deckViewModel.deleteFlashcard(widget.flashcard.id!);
-    Navigator.pop(context, true);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Flashcard excluído!'),
-        duration: Duration(milliseconds: 1500),
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Excluir Flashcard'),
+        content: Text('Tem certeza que deseja excluir este flashcard? Esta ação não pode ser desfeita.'),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.black,
+            ),
+            child: Text('Cancelar'),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.black,
+            ),
+            child: Text('Excluir'),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
       ),
     );
+
+    if (confirm == true) {
+      final deckViewModel = Provider.of<DeckViewModel>(context, listen: false);
+      await deckViewModel.deleteFlashcard(widget.flashcard.id!);
+      Navigator.pop(context, true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Flashcard excluído!'),
+          duration: Duration(milliseconds: 1500),
+        ),
+      );
+    }
   }
 
   @override
