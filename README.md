@@ -24,3 +24,9 @@
 - **Como usuário, quero estudar os flashcards de um deck** para revisar o conteúdo de forma prática.
 - **Como usuário, quero receber uma confirmação antes de excluir um flashcard ou um deck** para evitar exclusões acidentais.
 - **Como usuário, quero ver uma mensagem quando não houver decks ou flashcards** para saber que preciso adicionar novos conteúdos.
+
+## 🗄️ Banco de Dados
+
+O projeto utiliza o **SQLite** (via pacote `sqflite`) para armazenar os dados localmente no dispositivo.
+
+![GeniusCardDB.png](assets/images/GeniusCardDB.png)
